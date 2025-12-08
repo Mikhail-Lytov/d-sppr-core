@@ -86,6 +86,8 @@ public class PrimaryMatrixServiceImpl implements PrimaryMatrixService {
                     .toList();
 
                 componentAnalysisRepository.saveAll(componentToAnalysis);
+                outbox.setStatus(OutboxStatus.CLOSED);
+                outboxRepository.save(outbox);
         }
     }
 }
