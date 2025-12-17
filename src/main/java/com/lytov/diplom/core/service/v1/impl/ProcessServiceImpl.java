@@ -10,6 +10,7 @@ import com.lytov.diplom.core.external.parser.dto.UuidComponent;
 import com.lytov.diplom.core.repository.OutboxRepository;
 import com.lytov.diplom.core.repository.ProcessRepository;
 import com.lytov.diplom.core.service.v1.api.ProcessService;
+import com.lytov.diplom.core.service.v1.dto.BpmnGraph;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -54,6 +56,14 @@ public class ProcessServiceImpl implements ProcessService {
         ).collect(Collectors.toSet());
 
         outboxRepository.saveAll(outboxes);*/
+    }
+
+    @Override
+    public void addGraph(UUID processId, BpmnGraph bpmnGraph) {
+        processRepository.findById(processId).ifPresent(process -> {
+            process.setGraph(bpmnGraph);
+            processRepository.save(process);
+        });
     }
 
     @Scheduled(fixedRate = 60000)
