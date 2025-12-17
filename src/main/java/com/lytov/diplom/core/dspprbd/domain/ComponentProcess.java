@@ -10,8 +10,8 @@ import java.util.UUID;
 @Getter
 @Setter
 @Entity
-@Table(name = "component_analysis")
-public class ComponentAnalysis {
+@Table(name = "component_process")
+public class ComponentProcess {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false)
@@ -36,8 +36,10 @@ public class ComponentAnalysis {
     @Enumerated(EnumType.STRING)
     private OperationType componentOperationType;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "history_analysis_id")
-    private HistoryAnalysis historyAnalysis;
+    @Column(name = "weight_factor")
+    private Integer weightFactor;
 
+    @ManyToOne()
+    @JoinColumn(name = "process_id")
+    private Process processId;
 }
