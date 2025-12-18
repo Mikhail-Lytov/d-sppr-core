@@ -1,11 +1,13 @@
 package com.lytov.diplom.core.service.v1.impl;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lytov.diplom.core.configuration.rabbit.DAnalyzerRMQConfig;
 import com.lytov.diplom.core.configuration.rabbit.DCoreRMQConfig;
 import com.lytov.diplom.core.dspprbd.domain.Process;
+import com.lytov.diplom.core.exception.NotFoundException;
 import com.lytov.diplom.core.repository.ProcessRepository;
 import com.lytov.diplom.core.service.v1.api.ProcessService;
+import com.lytov.diplom.core.service.v1.dto.analyzer.AnalyzerRequest;
 import com.lytov.diplom.core.service.v1.dto.BpmnGraph;
 import com.lytov.diplom.core.service.v1.dto.RequestCreateGraph;
 import lombok.RequiredArgsConstructor;
@@ -57,6 +59,23 @@ public class ProcessServiceImpl implements ProcessService {
             process.setFirstParsing(false);
             processRepository.save(process);
         });
+
+        AnalyzerRequest request = new AnalyzerRequest(
+                processId,
+                bpmnGraph
+        );
+
+        rabbitTemplate.convertAndSend(
+                DAnalyzerRMQConfig.FROM_ANALYZER_PROCESS_EXCHANGE,
+                "",
+                request
+        );
+    }
+
+    @Override
+    public Process findProcessById(UUID processId) {
+        return processRepository.findById(processId)
+                .orElseThrow(() -> new NotFoundException("Process with id " + processId + " not found"));
     }
 
     @Scheduled(fixedRate = 60000)
