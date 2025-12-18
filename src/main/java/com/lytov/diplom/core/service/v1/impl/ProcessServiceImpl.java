@@ -42,11 +42,10 @@ public class ProcessServiceImpl implements ProcessService {
                 rabbitTemplate.convertAndSend(
                         DCoreRMQConfig.FROM_SPPR_CREATE_GRAPH_EXCHANGE,
                         "",
-                        objectMapper.writeValueAsBytes(graph)
+                        graph
                 );
-            } catch (JsonProcessingException e) {
-                log.error("error parsing", e);
-                throw new RuntimeException(e);
+            } catch (Exception e) {
+                log.error(e.getMessage(), e);
             }
         });
     }
@@ -55,6 +54,7 @@ public class ProcessServiceImpl implements ProcessService {
     public void addGraph(UUID processId, BpmnGraph bpmnGraph) {
         processRepository.findById(processId).ifPresent(process -> {
             process.setGraph(bpmnGraph);
+            process.setFirstParsing(false);
             processRepository.save(process);
         });
     }

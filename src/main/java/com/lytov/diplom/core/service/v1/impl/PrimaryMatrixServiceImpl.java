@@ -66,7 +66,7 @@ public class PrimaryMatrixServiceImpl implements PrimaryMatrixService {
 
             //TODO добавить автоматическикое определение типов
 
-            Process process = processRepository.save(new Process(LocalDateTime.now(), false, request.getFileId()));
+            Process process = processRepository.save(new Process(LocalDateTime.now(), true, request.getFileId()));
 
             List<ComponentProcess> componentToAnalysis = components.stream()
                     .map(

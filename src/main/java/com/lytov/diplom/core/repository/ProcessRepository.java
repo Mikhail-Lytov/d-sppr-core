@@ -15,7 +15,7 @@ public interface ProcessRepository extends JpaRepository<Process, UUID> {
             """
                     select p.*
                     from process p
-                    where p.first_parsing = false
+                    where p.first_parsing = true
                       and not exists (select 1
                                       from component_process cp
                                       where cp.process_id = p.id
