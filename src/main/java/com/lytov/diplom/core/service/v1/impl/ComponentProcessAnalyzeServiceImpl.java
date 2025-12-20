@@ -1,6 +1,7 @@
 package com.lytov.diplom.core.service.v1.impl;
 
 import com.lytov.diplom.core.dspprbd.domain.ComponentProcessAnalyze;
+import com.lytov.diplom.core.dspprbd.enums.AnalyzeType;
 import com.lytov.diplom.core.repository.ComponentProcessAnalyzeRepository;
 import com.lytov.diplom.core.service.v1.api.ComponentProcessAnalyzeService;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 
 @Slf4j
 @Service
@@ -19,5 +22,10 @@ public class ComponentProcessAnalyzeServiceImpl implements ComponentProcessAnaly
     @Override
     public void createAll(Collection<ComponentProcessAnalyze> processes) {
         componentProcessAnalyzeRepository.saveAll(processes);
+    }
+
+    @Override
+    public List<ComponentProcessAnalyze> findAllByAnalysisId(UUID analysisId) {
+        return componentProcessAnalyzeRepository.findAllByProcessAnalyze(analysisId, AnalyzeType.PROCESS_ANALYZE);
     }
 }
