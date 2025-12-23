@@ -11,4 +11,6 @@ public interface ProcessService {
     void addGraph(UUID processId, BpmnGraph bpmnGraph);
 
     Process findProcessById(UUID processId);
+
+    Process findFirst();
 }

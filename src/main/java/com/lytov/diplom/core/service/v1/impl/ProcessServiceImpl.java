@@ -78,6 +78,11 @@ public class ProcessServiceImpl implements ProcessService {
                 .orElseThrow(() -> new NotFoundException("Process with id " + processId + " not found"));
     }
 
+    @Override
+    public Process findFirst() {
+        return processRepository.findFirst();
+    }
+
     @Scheduled(fixedRate = 60000)
     public void createTask() {
         // Set<Process> processes = processRepository.findAllProcessActive();
